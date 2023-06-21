@@ -1,5 +1,5 @@
-# WebRTC-iOS
-A simple native WebRTC demo iOS app using swift. 
+# WebRTC-iOS-SwiftUI
+A simple native WebRTC demo iOS app using SwiftUI.
 
 ![Screenshots](images/WebRTC.png)
 

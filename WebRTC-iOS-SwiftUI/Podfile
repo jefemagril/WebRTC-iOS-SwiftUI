@@ -1,0 +1,3 @@
+target 'WebRTC-iOS-SwiftUI' do
+    pod 'WebRTC-lib'
+end
