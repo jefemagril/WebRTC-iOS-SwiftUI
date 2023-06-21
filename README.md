@@ -3,6 +3,8 @@ A simple native WebRTC demo iOS app using SwiftUI.
 
 ![Screenshots](images/WebRTC.png)
 
+This is a partial re-write of https://github.com/stasel/WebRTC-iOS using SwiftUI instead of UIKit. *Note*: video not yet implemented, only audio and data are working. I also got rid of the Starscream dependency and switched to using CocoaPods for the WebRTC-lib dependency.
+
 ## Disclaimer
 This demo app's purpose is to demonstrate the bare minimum required to establish peer to peer connection with WebRTC. **This is not a production ready code!** In order to have a production VoIP app you will need to have a real signaling server (not a simple broadcast server like in this example), deploy your own Turn server(s) and probably integrate CallKit and push notifications.
  
