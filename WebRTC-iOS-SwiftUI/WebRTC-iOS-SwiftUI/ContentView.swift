@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var webRTCClient = WebRTCClient()
+    @StateObject var webRTC = WebRTCService()
     @State var hasLocalSdp = false
     @State var muted = false
     @State var speakerOn = false
@@ -22,20 +22,20 @@ struct ContentView: View {
                 .padding()
             VStack(alignment: .leading, spacing: 20) {
                 Text("Signaling status: ") +
-                Text("\(webRTCClient.signalingConnected ? "Connected" : "Not connected")")
-                        .foregroundColor(webRTCClient.signalingConnected ? .green : .red)
+                Text("\(webRTC.signalingConnected ? "Connected" : "Not connected")")
+                        .foregroundColor(webRTC.signalingConnected ? .green : .red)
                 Text("Local SDP: \(hasLocalSdp ? "✅" : "❌")")
-                Text("Local Candidates: \(webRTCClient.localCandidateCount)")
-                Text("Remote SDP: \(webRTCClient.hasRemoteSdp ? "✅" : "❌")")
-                Text("Remote Candidates: \(webRTCClient.remoteCandidateCount)")
+                Text("Local Candidates: \(webRTC.localCandidateCount)")
+                Text("Remote SDP: \(webRTC.hasRemoteSdp ? "✅" : "❌")")
+                Text("Remote Candidates: \(webRTC.remoteCandidateCount)")
                 
                 Spacer()
                 
                 Group {
                     Text("WebRTC Status:")
-                    Text(webRTCClient.webRTCStatus)
+                    Text(webRTC.webRTCStatus)
                         .bold()
-                        .foregroundColor(webRTCClient.webRTCStatusTextColor)
+                        .foregroundColor(webRTC.webRTCStatusTextColor)
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
                 .font(.title3)
@@ -45,9 +45,9 @@ struct ContentView: View {
                 HStack {
                     Button(muted ? "Mute: on" : "Mute: off") {
                         if muted {
-                            webRTCClient.unmuteAudio()
+                            webRTC.unmuteAudio()
                         } else {
-                            webRTCClient.muteAudio()
+                            webRTC.muteAudio()
                         }
                         muted.toggle()
                     }
@@ -64,21 +64,27 @@ struct ContentView: View {
                             guard let dataToSend = dataToSendStr.data(using: .utf8) else {
                                 return
                             }
-                            webRTCClient.sendData(dataToSend)
+                            webRTC.sendData(dataToSend)
                         }
                     } message: {
                         Text("This will be transferred over WebRTC data channel")
                     }
-                    .alert("Message from WebRTC", isPresented: $webRTCClient.presentingData) {
-                        Text(webRTCClient.dataMessage)
+                    .alert(isPresented: $webRTC.presentingData) {
+                        Alert(
+                            title: Text("Message from WebRTC"),
+                            message: Text(webRTC.dataMessage)
+                        )
+                    }
+                    .onAppear {
+                        print(webRTC.dataMessage)
                     }
                 }
                 HStack {
                     Button(speakerOn ? "Speaker: On" : "Speaker: Off") {
                         if speakerOn {
-                            webRTCClient.speakerOff()
+                            webRTC.speakerOff()
                         } else {
-                            webRTCClient.speakerOn()
+                            webRTC.speakerOn()
                         }
                         speakerOn.toggle()
                     }
@@ -90,15 +96,15 @@ struct ContentView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             BigButton("Send offer") {
-                webRTCClient.offer { (sdp) in
+                webRTC.offer { (sdp) in
                     hasLocalSdp = true
-                    webRTCClient.signalClient.send(sdp: sdp)
+                    webRTC.send(sdp: sdp)
                 }
             }
             BigButton("Send answer") {
-                webRTCClient.answer { (localSdp) in
+                webRTC.answer { (localSdp) in
                     hasLocalSdp = true
-                    webRTCClient.signalClient.send(sdp: localSdp)
+                    webRTC.send(sdp: localSdp)
                 }
             }
         }

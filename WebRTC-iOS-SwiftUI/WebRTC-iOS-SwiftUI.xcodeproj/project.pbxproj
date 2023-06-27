@@ -20,6 +20,7 @@
 		1F2A20012A31785C00E46E90 /* IceCandidate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2A1FFE2A31785C00E46E90 /* IceCandidate.swift */; };
 		1F2A20022A31785C00E46E90 /* SessionDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2A1FFF2A31785C00E46E90 /* SessionDescription.swift */; };
 		1F2A20042A323E2500E46E90 /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F2A20032A323E2500E46E90 /* WebRTCClient.swift */; };
+		1FFE87962A43573B00988E5D /* WebRTCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FFE87952A43573B00988E5D /* WebRTCService.swift */; };
 		73CDE1D62DF3075895BD03CE /* libPods-WebRTC-iOS-SwiftUI.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1A88CC62920FE1B2D475EC8 /* libPods-WebRTC-iOS-SwiftUI.a */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +39,7 @@
 		1F2A1FFE2A31785C00E46E90 /* IceCandidate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IceCandidate.swift; sourceTree = "<group>"; };
 		1F2A1FFF2A31785C00E46E90 /* SessionDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDescription.swift; sourceTree = "<group>"; };
 		1F2A20032A323E2500E46E90 /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
+		1FFE87952A43573B00988E5D /* WebRTCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCService.swift; sourceTree = "<group>"; };
 		820D45CEC087483C27C4F620 /* Pods-WebRTC-iOS-SwiftUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebRTC-iOS-SwiftUI.debug.xcconfig"; path = "Target Support Files/Pods-WebRTC-iOS-SwiftUI/Pods-WebRTC-iOS-SwiftUI.debug.xcconfig"; sourceTree = "<group>"; };
 		BA961FD2FC98230E49A9C9F5 /* Pods-WebRTC-iOS-SwiftUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebRTC-iOS-SwiftUI.release.xcconfig"; path = "Target Support Files/Pods-WebRTC-iOS-SwiftUI/Pods-WebRTC-iOS-SwiftUI.release.xcconfig"; sourceTree = "<group>"; };
 		F1A88CC62920FE1B2D475EC8 /* libPods-WebRTC-iOS-SwiftUI.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WebRTC-iOS-SwiftUI.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,6 +98,7 @@
 				1F2A1FFC2A31784B00E46E90 /* Extensions */,
 				1F2A1FEE2A3177EC00E46E90 /* Services */,
 				1F2A1FDA2A31372A00E46E90 /* WebRTC_iOS_SwiftUIApp.swift */,
+				1FFE87952A43573B00988E5D /* WebRTCService.swift */,
 				1F2A1FDC2A31372A00E46E90 /* ContentView.swift */,
 				1F2A1FEC2A3174C300E46E90 /* Config.swift */,
 				1F2A1FDE2A31372B00E46E90 /* Assets.xcassets */,
@@ -266,6 +269,7 @@
 				1F2A20022A31785C00E46E90 /* SessionDescription.swift in Sources */,
 				1F2A20002A31785C00E46E90 /* RTCStates.swift in Sources */,
 				1F2A20012A31785C00E46E90 /* IceCandidate.swift in Sources */,
+				1FFE87962A43573B00988E5D /* WebRTCService.swift in Sources */,
 				1F2A20042A323E2500E46E90 /* WebRTCClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

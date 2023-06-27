@@ -8,7 +8,6 @@
 
 import Foundation
 import WebRTC
-import SwiftUI
 
 protocol WebRTCClientDelegate: AnyObject {
     func webRTCClient(_ client: WebRTCClient, didDiscoverLocalCandidate candidate: RTCIceCandidate)
@@ -16,7 +15,7 @@ protocol WebRTCClientDelegate: AnyObject {
     func webRTCClient(_ client: WebRTCClient, didReceiveData data: Data)
 }
 
-final class WebRTCClient: NSObject, ObservableObject {
+final class WebRTCClient: NSObject {
     
     // The `RTCPeerConnectionFactory` is in charge of creating new RTCPeerConnection instances.
     // A new RTCPeerConnection should be created every new call, but the factory is shared.
@@ -38,23 +37,15 @@ final class WebRTCClient: NSObject, ObservableObject {
     private var remoteVideoTrack: RTCVideoTrack?
     private var localDataChannel: RTCDataChannel?
     private var remoteDataChannel: RTCDataChannel?
-    
-    // Signaling
-    @Published var signalingConnected = false
-    @Published var hasRemoteSdp = false
-    @Published var remoteCandidateCount = 0
-    
-    // WebRTC
-    @Published var localCandidateCount = 0
-    var signalClient: SignalingClient
-    @Published var webRTCStatus = "New"
-    var presentingData = false
-    @Published var dataMessage = ""
-    @Published var webRTCStatusTextColor = Color.black
-    
+
+    @available(*, unavailable)
     override init() {
+        fatalError("WebRTCClient:init is unavailable")
+    }
+    
+    required init(iceServers: [String]) {
         let config = RTCConfiguration()
-        config.iceServers = [RTCIceServer(urlStrings: Config.default.webRTCIceServers)]
+        config.iceServers = [RTCIceServer(urlStrings: iceServers)]
         
         // Unified plan is more superior than planB
         config.sdpSemantics = .unifiedPlan
@@ -71,17 +62,11 @@ final class WebRTCClient: NSObject, ObservableObject {
         }
         
         self.peerConnection = peerConnection
-        self.signalClient = SignalingClient(
-            webSocket: NativeWebSocket(url: Config.default.signalingServerUrl)
-        )
         
         super.init()
         self.createMediaSenders()
         self.configureAudioSession()
-        self.delegate = self
         self.peerConnection.delegate = self
-        self.signalClient.delegate = self
-        self.signalClient.connect()
     }
     
     // MARK: Signaling
@@ -339,76 +324,5 @@ extension WebRTCClient: RTCDataChannelDelegate {
     
     func dataChannel(_ dataChannel: RTCDataChannel, didReceiveMessageWith buffer: RTCDataBuffer) {
         self.delegate?.webRTCClient(self, didReceiveData: buffer.data)
-    }
-}
-
-extension WebRTCClient: SignalClientDelegate {
-    func signalClientDidConnect(_ signalClient: SignalingClient) {
-        DispatchQueue.main.async {
-            self.signalingConnected = true
-        }
-    }
-    
-    func signalClientDidDisconnect(_ signalClient: SignalingClient) {
-        DispatchQueue.main.async {
-            self.signalingConnected = false
-        }
-    }
-    
-    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription) {
-        print("Received remote sdp")
-        self.set(remoteSdp: sdp) { (error) in
-            DispatchQueue.main.async {
-                self.hasRemoteSdp = true
-            }
-        }
-    }
-    
-    func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate) {
-        self.set(remoteCandidate: candidate) { error in
-            print("Received remote candidate")
-            DispatchQueue.main.async {
-                self.remoteCandidateCount += 1
-            }
-        }
-    }
-}
-
-extension WebRTCClient: WebRTCClientDelegate {
-    func webRTCClient(_ client: WebRTCClient, didDiscoverLocalCandidate candidate: RTCIceCandidate) {
-        print("discovered local candidate")
-        DispatchQueue.main.async {
-            self.localCandidateCount += 1
-        }
-        self.signalClient.send(candidate: candidate)
-    }
-    
-    func webRTCClient(_ client: WebRTCClient, didChangeConnectionState state: RTCIceConnectionState) {
-        let textColor: Color
-        switch state {
-        case .connected, .completed:
-            textColor = .green
-        case .disconnected:
-            textColor = .orange
-        case .failed, .closed:
-            textColor = .red
-        case .new, .checking, .count:
-            textColor = .black
-        @unknown default:
-            textColor = .black
-        }
-        DispatchQueue.main.async {
-            self.webRTCStatus = state.description.capitalized
-            self.webRTCStatusTextColor = textColor
-        }
-    }
-    
-    func webRTCClient(_ client: WebRTCClient, didReceiveData data: Data) {
-        DispatchQueue.main.async {
-            self.dataMessage = String(data: data, encoding: .utf8) ?? "(Binary: \(data.count) bytes)"
-//            let alert = UIAlertController(title: "Message from WebRTC", message: message, preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-            self.presentingData = true
-        }
     }
 }
